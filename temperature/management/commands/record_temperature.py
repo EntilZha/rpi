@@ -11,8 +11,8 @@ class Command(BaseCommand):
             ['pcsensor'], stdout=subprocess.PIPE).stdout.decode('utf-8')
         tokens = raw_temp.strip().split()
         zone = get_current_timezone()
-        datetime_str = '{0} {1}'.format(tokens[0], tokens[1])
-        recorded_time = zone.tzname(datetime.strptime(datetime_str, '%Y/%m/%d %H:%M:%S'))
+        datetime_str = '{0} {1} MST'.format(tokens[0], tokens[1])
+        recorded_time = datetime.strptime(datetime_str, '%Y/%m/%d %H:%M:%S %Z')
         temp_f = float(tokens[3].replace('F', ''))
         temp_c = float(tokens[4].replace('C', ''))
         reading = TemperatureReading(
