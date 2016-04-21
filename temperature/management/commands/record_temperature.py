@@ -1,6 +1,6 @@
 import subprocess
 from datetime import datetime
-from django.utils.timezone import get_current_timezone
+from django.utils.timezone import make_aware, get_default_timezone
 from django.core.management.base import BaseCommand
 from temperature.models import TemperatureReading
 
@@ -10,9 +10,10 @@ class Command(BaseCommand):
         raw_temp = subprocess.run(
             ['pcsensor'], stdout=subprocess.PIPE).stdout.decode('utf-8')
         tokens = raw_temp.strip().split()
-        zone = get_current_timezone()
-        datetime_str = '{0} {1} MDT'.format(tokens[0], tokens[1])
-        recorded_time = datetime.strptime(datetime_str, '%Y/%m/%d %H:%M:%S %Z')
+        zone = get_default_timezone()
+        datetime_str = '{0} {1}'.format(tokens[0], tokens[1])
+        recorded_time = make_aware(
+            datetime.strptime(datetime_str, '%Y/%m/%d %H:%M:%S'), timezone=zone)
         temp_f = float(tokens[3].replace('F', ''))
         temp_c = float(tokens[4].replace('C', ''))
         reading = TemperatureReading(
