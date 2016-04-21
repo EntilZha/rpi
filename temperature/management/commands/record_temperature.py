@@ -8,7 +8,7 @@ from temperature.models import TemperatureReading
 class Command(BaseCommand):
     def handle(self, *args, **options):
         raw_temp = subprocess.run(
-            ['pcsensor'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+            ['/usr/local/bin/pcsensor'], stdout=subprocess.PIPE).stdout.decode('utf-8')
         tokens = raw_temp.strip().split()
         zone = get_default_timezone()
         datetime_str = '{0} {1}'.format(tokens[0], tokens[1])
