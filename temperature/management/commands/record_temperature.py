@@ -12,7 +12,7 @@ class Command(BaseCommand):
         tokens = raw_temp.strip().split()
         zone = get_current_timezone()
         datetime_str = '{0} {1}'.format(tokens[0], tokens[1])
-        recorded_time = zone.localize(datetime.strptime(datetime_str, '%Y/%m/%d %I:%M:%S'))
+        recorded_time = zone.tzname(datetime.strptime(datetime_str, '%Y/%m/%d %I:%M:%S'))
         temp_f = float(tokens[3].replace('F', ''))
         temp_c = float(tokens[4].replace('C', ''))
         reading = TemperatureReading(
