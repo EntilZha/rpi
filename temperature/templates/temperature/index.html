@@ -30,9 +30,6 @@
         <li><a href="#">Profile</a></li>
         <li><a href="#">Help</a></li>
       </ul>
-      <form class="navbar-form navbar-right">
-        <input type="text" class="form-control" placeholder="Search...">
-      </form>
     </div>
   </div>
 </nav>
@@ -48,14 +45,21 @@
       </ul>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-      <h1 class="page-header">Dashboard</h1>
-      <div class="row placeholders">
-        <div class="col-md-12">
-            <script type="text/javascript">
-              google.charts.load('current', {'packages':['corechart']});
-              google.charts.setOnLoadCallback(drawChart);
+        <h1 class="page-header">Dashboard</h1>
+        <div class="row placeholders">
+            <div class="col-md-3">
+                <h1>Temperature</h1>
+                <div class="jumbotron">
+                    <h2>{{ current_temp.temperature_c}}&deg;C</h2>
+                    <h2>{{ current_temp.temperature_f}}&deg;F</h2>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <script type="text/javascript">
+                google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(drawChart);
 
-              function drawChart() {
+                function drawChart() {
                 var data = google.visualization.arrayToDataTable([
                   ['Date', 'Degrees C', 'Degrees F'],
                   {% if temperature_list %}
@@ -74,7 +78,7 @@
                 var chart = new google.visualization.LineChart(document.getElementById('temp_chart'));
 
                 chart.draw(data, options);
-              }
+                }
             </script>
             <div id="temp_chart"></div>
         </div>
@@ -86,8 +90,8 @@
           <thead>
             <tr>
               <th>Time</th>
-              <th>Temperature in F</th>
-              <th>Temperature in C</th>
+              <th>Temperature in &deg;C</th>
+              <th>Temperature in &deg;F</th>
             </tr>
           </thead>
           <tbody>
