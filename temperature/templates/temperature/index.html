@@ -35,80 +35,85 @@
 </nav>
 
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-3 col-md-2 sidebar">
-      <ul class="nav nav-sidebar">
-        <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Reports</a></li>
-        <li><a href="#">Analytics</a></li>
-        <li><a href="#">Export</a></li>
-      </ul>
-    </div>
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <h1 class="page-header">Dashboard</h1>
-        <div class="row placeholders">
-            <div class="col-md-3">
-                <h1>Temperature</h1>
-                <div class="jumbotron">
-                    <h2>{{ current_temp.temperature_c}}&deg;C</h2>
-                    <h2>{{ current_temp.temperature_f}}&deg;F</h2>
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+            <li><a href="#">Reports</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Export</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">Dashboard</h1>
+            <div class="row">
+                <div class="col-md-12">
+                    <iframe id="forecast_embed" type="text/html" frameborder="0" height="245" width="100%" src="http://forecast.io/embed/#lat=40.0157&lon=-105.2792&name=Boulder"> </iframe>
                 </div>
             </div>
-            <div class="col-md-9">
-                <script type="text/javascript">
-                google.charts.load('current', {'packages':['corechart']});
-                google.charts.setOnLoadCallback(drawChart);
+            <div class="row">
+                <div class="col-md-3">
+                    <h1>Temperature</h1>
+                    <div class="jumbotron">
+                        <h2>{{ current_temp.temperature_c}}&deg;C</h2>
+                        <h2>{{ current_temp.temperature_f}}&deg;F</h2>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <script type="text/javascript">
+                    google.charts.load('current', {'packages':['corechart']});
+                    google.charts.setOnLoadCallback(drawChart);
 
-                function drawChart() {
-                var data = google.visualization.arrayToDataTable([
-                  ['Date', 'Degrees C', 'Degrees F'],
-                  {% if temperature_list %}
-                  {% for temp in temperature_list %}
-                  [new Date('{{ temp.recorded_time.isoformat}}'), {{ temp.temperature_c }}, {{ temp.temperature_f}}],
-                  {% endfor %}
-                  {% endif %}
-                ]);
+                    function drawChart() {
+                        var data = google.visualization.arrayToDataTable([
+                            ['Date', 'Degrees C', 'Degrees F'],
+                            {% if temperature_list %}
+                            {% for temp in temperature_list %}
+                            [new Date('{{ temp.recorded_time.isoformat}}'), {{ temp.temperature_c }}, {{ temp.temperature_f}}],
+                            {% endfor %}
+                            {% endif %}
+                        ]);
 
-                var options = {
-                  title: 'Temperature',
-                  curveType: 'function',
-                  legend: { position: 'bottom' }
-                };
+                        var options = {
+                            title: 'Temperature',
+                            curveType: 'function',
+                            legend: { position: 'bottom' }
+                        };
 
-                var chart = new google.visualization.LineChart(document.getElementById('temp_chart'));
+                        var chart = new google.visualization.LineChart(document.getElementById('temp_chart'));
 
-                chart.draw(data, options);
-                }
-            </script>
-            <div id="temp_chart"></div>
+                        chart.draw(data, options);
+                    }
+                    </script>
+                    <div id="temp_chart"></div>
+                </div>
+            </div>
+
+            <h2 class="sub-header">Temperature Table</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Temperature in &deg;C</th>
+                            <th>Temperature in &deg;F</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if temperature_list %}
+                        {% for temp in temperature_list %}
+                        <tr>
+                            <td>{{ temp.recorded_time }}</td>
+                            <td>{{ temp.temperature_c }}</td>
+                            <td>{{ temp.temperature_f }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-      </div>
-
-      <h2 class="sub-header">Temperature Table</h2>
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Time</th>
-              <th>Temperature in &deg;C</th>
-              <th>Temperature in &deg;F</th>
-            </tr>
-          </thead>
-          <tbody>
-                {% if temperature_list %}
-                {% for temp in temperature_list %}
-                <tr>
-                    <td>{{ temp.recorded_time }}</td>
-                    <td>{{ temp.temperature_c }}</td>
-                    <td>{{ temp.temperature_f }}</td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-          </tbody>
-        </table>
-      </div>
     </div>
-  </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="/static/temperature/js/bootstrap.min.js"></script>
