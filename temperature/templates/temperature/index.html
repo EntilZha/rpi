@@ -66,10 +66,10 @@
 
                     function drawChart() {
                         var data = google.visualization.arrayToDataTable([
-                            ['Date', 'Degrees C', 'Degrees F'],
+                            ['Date', 'Degrees F'],
                             {% if temperature_list %}
                             {% for temp in temperature_list %}
-                            [new Date('{{ temp.recorded_time.isoformat}}'), {{ temp.temperature_c }}, {{ temp.temperature_f}}],
+                            [new Date('{{ temp.recorded_time.isoformat}}'), {{ temp.temperature_f}}],
                             {% endfor %}
                             {% endif %}
                         ]);
